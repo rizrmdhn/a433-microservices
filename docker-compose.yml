@@ -1,0 +1,27 @@
+services:
+  # Service untuk aplikasi utama
+  item-app:
+    # Menggunakan image item-app dari GitHub Container Registry
+    image: ghcr.io/rizrmdhn/item-app:v1
+    # Melakukan port mapping agar dapat diakses dari port 80 di host
+    ports:
+      - "80:8080"
+    # Memastikan item-app hanya berjalan setelah item-db diluncurkan
+    depends_on:
+      - item-db
+    # Restart policy agar container selalu restart ketika terhenti
+    restart: always
+
+  # Service untuk database MongoDB
+  item-db:
+    # Menggunakan image mongo versi 3 dari Docker Hub
+    image: mongo:3
+    # Menggunakan volume app-db dengan target /data/db di container
+    volumes:
+      - app-db:/data/db
+    # Restart policy agar container selalu restart ketika terhenti
+    restart: always
+
+# Mendefinisikan volume bernama app-db
+volumes:
+  app-db:
